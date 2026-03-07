@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Medical Results</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <div class="results-page">
+  <div class="container">
+    <h2>Medical Results History & Trends</h2>
+
+    <!-- Filters -->
+    <div class="filters">
+      <label for="childFilter">Filter by Child:</label>
+      <select id="childFilter">
+        <option value="">All Children</option>
+      </select>
+
+      <label for="typeFilter">Filter by Type:</label>
+      <select id="typeFilter">
+        <option value="">All Types</option>
+        <option value="blood">Blood</option>
+        <option value="urine">Urine</option>
+        <option value="vitamin">Vitamin</option>
+      </select>
+    </div>
+
+    <!-- Message Box -->
+    <div id="messageBox"></div>
+
+    <!-- Results + Chart Layout -->
+    <div class="content">
+      <div class="results">
+        <h3>Analysis Results</h3>
+        <ul id="resultsList"></ul>
+      </div>
+      <div class="chart">
+        <h3>Trend Chart</h3>
+        <canvas id="trendChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="editModal">
+      <h3>Edit Analysis</h3>
+      <form id="editForm">
+        <div id="editFields"></div>
+        <div class="modal-buttons">
+          <button type="submit">Save</button>
+          <button type="button" id="closeEdit">Cancel</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Overlay -->
+    <div id="overlay"></div>
+  </div>
+  </div>
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script type="module" src="../js/results.js"></script>
+</body>
+</html>

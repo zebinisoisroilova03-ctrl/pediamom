@@ -1,0 +1,1508 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ===============================
+   LANDING PAGE
+================================ */
+
+.landing {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 30px;
+  text-align: center;
+}
+/* ===============================
+   LANDING PAGE
+================================ */
+
+/* ===============================
+   LANDING PAGE
+================================ */
+
+.landing-page {
+  min-height: 100vh;
+  background: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  text-align: center;
+  padding: 20px;
+}
+
+.landing-page .logo {
+  width: 90px;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+.landing-page h1 {
+  font-size: 32px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.landing-page p {
+  max-width: 520px;
+  font-size: 16px;
+  color: #475569;
+  margin-bottom: 30px;
+}
+
+.landing-page .actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.landing-page .btn {
+  padding: 10px 18px;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.landing-page .btn.primary {
+  background: #2563eb;
+  color: #fff;
+}
+.landing-page .btn.primary:hover {
+  background: #1d4ed8;
+}
+
+.landing-page .btn.secondary {
+  background: #e5e7eb;
+  color: #111827;
+}
+.landing-page .btn.secondary:hover {
+  background: #d1d5db;
+}
+
+
+/* ===============================
+   AUTH PAGES (LOGIN / REGISTER)
+================================ */
+
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f0f4ff, #f8fafc);
+  padding: 20px;
+  flex-direction: column;
+}
+
+.auth-page h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.auth-page form {
+  background: #ffffff;
+  width: 100%;
+  max-width: 360px;
+  padding: 28px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.auth-page input {
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid #cbd5e1;
+  font-size: 14px;
+}
+
+.auth-page input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+}
+
+.auth-page button {
+  margin-top: 10px;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #ffffff;
+  border: none;
+  padding: 12px;
+  border-radius: 14px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.auth-page button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 22px rgba(37,99,235,0.35);
+}
+
+.auth-page button:active {
+  transform: scale(0.98);
+}
+
+/* 📱 Mobile */
+@media (max-width: 420px) {
+  .auth-page form {
+    padding: 22px;
+  }
+
+  .auth-page h2 {
+    font-size: 20px;
+  }
+}
+
+/* ===============================
+   DASHBOARD PAGE
+================================ */
+
+/* ======================
+   DASHBOARD (SCOPED)
+   faqat .dashboard-page ichida ishlaydi
+====================== */
+
+.dashboard-page .dashboard-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #f8fafc;
+}
+
+/* SIDEBAR */
+.dashboard-page .sidebar {
+  width: 240px;
+  background: #0f172a;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.dashboard-page .sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 30px;
+}
+
+.dashboard-page .sidebar-logo {
+  width: 36px;
+}
+
+.dashboard-page .menu {
+  flex: 1;
+}
+
+.dashboard-page .menu-item {
+  display: block;
+  padding: 10px 14px;
+  border-radius: 10px;
+  color: #cbd5f5;
+  text-decoration: none;
+  margin-bottom: 6px;
+  cursor: pointer;
+}
+
+.dashboard-page .menu-item:hover,
+.dashboard-page .menu-item.active {
+  background: #1e293b;
+  color: #fff;
+}
+
+.dashboard-page .logout-btn {
+  background: #ef4444;
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* MAIN CONTENT */
+.dashboard-page .main-content {
+  flex: 1;
+  padding: 30px;
+}
+
+.dashboard-page .cards {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.dashboard-page .card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 14px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+}
+
+.dashboard-page .card h3 {
+  margin-bottom: 6px;
+}
+/* =====================
+   PEDIAMOM DASHBOARD MODAL
+===================== */
+
+.dashboard-page .pm-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.dashboard-page .pm-modal.hidden {
+  display: none;
+}
+
+.dashboard-page .pm-modal-box {
+  background: #ffffff;
+  padding: 22px 24px;
+  border-radius: 16px;
+  width: 320px;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+  animation: pmModalFade 0.2s ease;
+}
+
+.dashboard-page .pm-modal-box p {
+  font-size: 15px;
+  font-weight: 500;
+  color: #1f2937;
+}
+
+/* ACTIONS */
+.dashboard-page .pm-modal-actions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.dashboard-page .pm-modal-actions button {
+  flex: 1;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 0;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* DELETE */
+.dashboard-page .pm-danger {
+  background: #ef4444;
+  color: #ffffff;
+}
+
+.dashboard-page .pm-danger:hover {
+  background: #dc2626;
+}
+
+/* CANCEL */
+.dashboard-page #confirmNo {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.dashboard-page #confirmNo:hover {
+  background: #d1d5db;
+}
+
+/* ANIMATION */
+@keyframes pmModalFade {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+/* ===== Medicine Child Filter ===== */
+.dashboard-page .medicine-child-filter {
+  margin-bottom: 16px;
+  max-width: 280px;
+}
+
+.dashboard-page .medicine-child-filter label {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 6px;
+  color: #444;
+}
+
+.dashboard-page .medicine-child-filter select {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+}
+
+
+/* =============================== 
+   ADD CHILD PAGE (SCOPED)
+================================ */
+/* ===============================
+   CHILDREN PAGE (SPA-FRIENDLY)
+================================ */
+
+/* Container */
+.children-page {
+  min-height: 100%;
+  padding: 20px;
+  background: linear-gradient(135deg, #f0f4ff, #f8fafc);
+  font-family: "Inter", system-ui, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* TITLE */
+.children-page h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #2563eb;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+/* ===============================
+   ADD / EDIT FORM
+================================ */
+.children-page #childForm {
+  width: 100%;
+  max-width: 420px;
+  background: #ffffff;
+  padding: 26px;
+  border-radius: 18px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.children-page #childForm input,
+.children-page #childForm select {
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid #cbd5e1;
+  font-size: 14px;
+  background: #ffffff;
+  color: #1e293b;
+}
+
+.children-page #childForm input:focus,
+.children-page #childForm select:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+}
+
+/* Add Child Button (form ostida) */
+.children-page #addChildBtn {
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 14px;
+  border: none;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  text-align: center;
+}
+
+.children-page #addChildBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 22px rgba(37,99,235,0.35);
+}
+
+.children-page #addChildBtn:active {
+  transform: scale(0.97);
+}
+
+/* CHILD LIST */
+.children-page #childList {
+  list-style: none;
+  padding: 0;
+  margin: 24px 0 0;
+  width: 100%;
+  max-width: 700px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.children-page #childList li {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 16px 18px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  color: #1e293b;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Info section */
+.children-page .child-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #1e293b;
+}
+
+.children-page .child-name {
+  font-weight: 600;
+}
+
+.children-page .divider {
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+.children-page .gender {
+  text-transform: capitalize;
+}
+
+/* Actions */
+.children-page .child-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.children-page .child-actions button {
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: none;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+/* Edit button */
+.children-page .editBtn {
+  background: #e0e7ff;
+  color: #1d4ed8;
+}
+
+.children-page .editBtn:hover {
+  background: #c7d2fe;
+}
+
+/* Delete button */
+.children-page .deleteBtn {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.children-page .deleteBtn:hover {
+  background: #fecaca;
+}
+
+/* ===============================
+   DELETE CONFIRMATION MODAL
+   (No blur, medicinelist style)
+================================ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.15); /* Light overlay, no blur */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modal-overlay.hidden {
+  display: none;
+}
+
+.modal-box {
+  background: #ffffff;
+  padding: 26px 24px;
+  border-radius: 18px;
+  width: 90%;
+  max-width: 360px;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+  animation: scaleIn 0.2s ease;
+}
+
+.modal-box h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 22px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.modal-actions button {
+  flex: 1;
+  padding: 10px 0;
+  border-radius: 12px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.modal-actions .yes-btn {
+  background: #ef4444;
+  color: #ffffff;
+}
+
+.modal-actions .yes-btn:hover {
+  box-shadow: 0 8px 20px rgba(239,68,68,0.4);
+  transform: translateY(-1px);
+}
+
+.modal-actions .no-btn {
+  background: #e5e7eb;
+  color: #1e293b;
+}
+
+.modal-actions .no-btn:hover {
+  background: #d1d5db;
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* ===============================
+   RESPONSIVE
+================================ */
+@media (max-width: 600px) {
+  .children-page #childList li {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .children-page .child-actions {
+    width: 100%;
+  }
+
+  .children-page .child-actions button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .children-page #childForm {
+    padding: 20px;
+  }
+
+  .children-page h2 {
+    font-size: 20px;
+  }
+}
+
+
+
+/* ------medicine_list.html--------*/
+
+/* =====================
+   PAGE BASE
+===================== */
+.medicine_list {
+  background: #f4f6f8;
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100%;
+  padding: 20px;
+  color: #333;
+}
+
+/* =====================
+   MAIN CONTAINER
+===================== */
+.medicine_list .container {
+  max-width: 720px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* =====================
+   TITLE
+===================== */
+.medicine_list .container > h2 {
+  background: #ffffff;
+  padding: 18px 20px;
+  border-radius: 14px;
+  text-align: center;
+  font-size: 22px;
+  font-weight: 600;
+  color: #2563eb;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+}
+
+/* =====================
+   ADD MEDICINE FORM
+===================== */
+#addMedicineForm {
+  background: #ffffff;
+  padding: 18px;
+  border-radius: 14px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr auto;
+  gap: 12px;
+}
+
+#addMedicineForm input {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+}
+
+#addMedicineForm input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+}
+
+#addMedicineForm button {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+#addMedicineForm button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(37,99,235,0.35);
+}
+
+/* =====================
+   MEDICINE LIST
+===================== */
+#medicineList {
+  list-style: none;
+  background: #ffffff;
+  padding: 18px;
+  border-radius: 14px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+#medicineList li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 14px;
+  background: #f9fafb;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+#medicineList li:hover {
+  background-color: #eef2ff;
+  transform: translateY(-1px);
+}
+
+#medicineList span {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* =====================
+   ACTION BUTTONS
+===================== */
+#medicineList .actions {
+  display: flex;
+  gap: 8px;
+}
+
+#medicineList .editBtn,
+#medicineList .deleteBtn,
+#medicineList .saveBtn,
+#medicineList .cancelBtn {
+  border: none;
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+#medicineList .editBtn {
+  background: #e0e7ff;
+  color: #1e40af;
+  margin-right: 8px;
+}
+
+#medicineList .deleteBtn {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+#medicineList .saveBtn {
+  background: #dcfce7;
+  color: #065f46;
+}
+
+#medicineList .cancelBtn {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+#medicineList .editBtn:hover,
+#medicineList .deleteBtn:hover,
+#medicineList .saveBtn:hover,
+#medicineList .cancelBtn:hover {
+  opacity: 0.85;
+}
+
+/* =====================
+   INLINE EDIT FORM
+===================== */
+#medicineList .editForm {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr auto auto;
+  gap: 8px;
+}
+
+#medicineList .editForm input {
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 13px;
+}
+
+/* =====================
+   RESPONSIVE
+===================== */
+@media (max-width: 700px) {
+  #addMedicineForm {
+    grid-template-columns: 1fr;
+  }
+
+  #medicineList li {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  #medicineList .editForm {
+    grid-template-columns: 1fr;
+  }
+
+  #medicineList .actions {
+    align-self: flex-end;
+  }
+}
+
+
+
+/* -----------medicine_list.html css end--------------- */
+
+/* --------daily_checklist.html--------- */
+.dailychecklist {
+  background: #f4f6f9;
+  min-height: 100%;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  color: #1f2937;
+  line-height: 1.6;
+}
+
+/* =====================
+   MAIN CONTAINER
+===================== */
+.dailychecklist .container {
+  width: 100%;
+  max-width: 720px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* =====================
+   PAGE TITLE
+===================== */
+.dailychecklist .container > h2 {
+  background: #ffffff;
+  padding: 18px 20px;
+  border-radius: 14px;
+  text-align: center;
+  font-size: 22px;
+  font-weight: 600;
+  color: #2563eb;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+}
+.dailychecklist .hint {
+  margin-top: 20px;
+  padding: 12px;
+  background: #f5f7fa;
+  border: 1px dashed #ccc;
+  border-radius: 8px;
+  color: #555;
+  text-align: center;
+}
+
+/* =====================
+   CHECKLIST
+===================== */
+#dailyChecklist {
+  list-style: none;
+  background: #ffffff;
+  padding: 18px;
+  border-radius: 14px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+#dailyChecklist li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 15px;
+  background: #f9fafb;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+#dailyChecklist li:hover {
+  transform: translateY(-2px);
+  background-color: #e6f9ea;
+}
+
+#dailyChecklist label,
+#dailyChecklist span {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Checkbox */
+#dailyChecklist input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+/* =====================
+   STREAK BOX
+===================== */
+.dailychecklist .streak-box {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #ffffff;
+  padding: 20px;
+  border-radius: 16px;
+  text-align: center;
+  margin: 10px 0;
+  box-shadow: 0 12px 30px rgba(37,99,235,0.35);
+}
+
+.dailychecklist .streak-box p {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.dailychecklist .streak-box h2 {
+  font-size: 32px;
+  margin-top: 6px;
+}
+
+/* =====================
+   CHART BOX
+===================== */
+.dailychecklist .chart-box {
+  background: #ffffff;
+  padding: 18px;
+  border-radius: 14px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+}
+
+.dailychecklist .chart-box h3 {
+  font-size: 16px;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+/* =====================
+   BADGE & WARNING
+===================== */
+.dailychecklist .badge,
+.dailychecklist .warning {
+  padding: 14px 16px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  margin-top: 10px;
+}
+
+.dailychecklist .badge {
+  background: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #6ee7b7;
+}
+
+.dailychecklist .warning {
+  background: #fef2f2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}
+
+/* =====================
+   HIDDEN
+===================== */
+.dailychecklist .hidden {
+  display: none;
+}
+
+/* =====================
+   RESPONSIVE
+===================== */
+@media (max-width: 600px) {
+  .dailychecklist {
+    padding: 12px;
+  }
+
+  #dailyChecklist li {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .dailychecklist .streak-box h2 {
+    font-size: 26px;
+  }
+}
+
+/* ---------daily_checklist.html end------------ */
+
+/* -----------addanalysis.html------------ */
+/* =========================
+   PAGE BASE
+========================= */
+.addanalysis {
+  margin: 0;
+  font-family: "Inter", Arial, sans-serif;
+  background: #f4f6f9;
+  min-height: 100%;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  color: #1f2937;
+}
+
+/* =========================
+   MAIN CONTAINER
+========================= */
+.addanalysis .container {
+  width: 100%;
+  max-width: 560px;
+  background: #ffffff;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* =========================
+   HEADER
+========================= */
+.addanalysis .header {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.addanalysis .header h2 {
+  margin: 0;
+  text-align: center;
+  font-size: 22px;
+  font-weight: 600;
+  color: #2563eb;
+}
+
+/* =========================
+   MESSAGE BOX
+========================= */
+.addanalysis #messageBox {
+  display: none;
+  padding: 12px 14px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.addanalysis #messageBox.success {
+  background: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #6ee7b7;
+}
+
+.addanalysis #messageBox.error {
+  background: #fef2f2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}
+
+/* =========================
+   FORM
+========================= */
+#medicalForm {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* LABEL */
+#medicalForm label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+}
+
+/* INPUT & SELECT */
+#medicalForm input,
+#medicalForm select {
+  width: 100%;
+  padding: 11px 12px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+  background: #ffffff;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+
+#medicalForm input:focus,
+#medicalForm select:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+}
+
+/* =========================
+   ANALYSIS SECTIONS
+========================= */
+#bloodFields,
+#urineFields,
+#vitaminFields {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  padding: 14px;
+  border-radius: 14px;
+  flex-direction: column;
+  gap: 10px;
+  text-align: center;
+}
+
+#bloodFields h4,
+#urineFields h4,
+#vitaminFields h4 {
+  margin: 0 0 6px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #2563eb;
+
+
+}
+
+/* =========================
+   SUBMIT BUTTON
+========================= */
+#medicalForm button {
+  margin-top: 10px;
+  width: 100%;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  padding: 13px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+#medicalForm button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 22px rgba(37,99,235,0.35);
+}
+
+#medicalForm button:active {
+  transform: scale(0.98);
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 480px) {
+  .addanalysis {
+    padding: 12px;
+  }
+
+  .addanalysis .container {
+    padding: 18px;
+  }
+
+  .addanalysis .header h2 {
+    font-size: 20px;
+  }
+
+  #medicalForm button {
+    font-size: 14px;
+    padding: 12px;
+  }
+}
+
+ /* -----------addanalysis.html end------------ */
+
+ /* -------------results.html------------*/
+.results-page {
+  margin: 0;
+  font-family: "Inter", Arial, sans-serif;
+  background: #f4f6f9;
+  min-height: 100%;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  color: #1f2937;
+}
+.results-page .container {
+  width: 80%;
+  margin: 20px auto;
+  padding: 20px;
+}
+/* ===== TITLE ===== */
+.results-page h2 {
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #2563eb;
+  text-align: center;
+}
+/* ====== FILTERS ====== */
+.results-page .filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 20px;
+  align-items: center;
+    background: #ffffff;
+  padding: 14px 16px;
+  border-radius: 14px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+}
+.results-page .filters label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #334155;
+}
+.results-page .filters select {
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid #cbd5e1;
+  font-size: 14px;
+}
+
+/* ====== MESSAGE BOX ====== */
+.results-page #messageBox {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  min-width: 200px;
+  max-width: 90%;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  color: #fff;
+  font-family: Arial, sans-serif;
+  opacity: 0;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  transform: translateY(-20px);
+  transition: opacity 0.4s ease, transform 0.4s ease, box-shadow 0.3s ease;
+  z-index: 9999;
+}
+.results-page #messageBox.show {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+.results-page #messageBox.success { background-color: #4caf50; }
+.results-page #messageBox.error { background-color: #f44336; }
+.results-page #messageBox:hover {
+  box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+  cursor: pointer;
+}
+.results-page #messageBox span.icon { font-size: 18px; }
+
+/* 📱 Responsive adjustments for messageBox */
+@media (max-width: 600px) {
+  .results-page #messageBox {
+    top: auto;
+    bottom: 20px;
+    right: 50%;
+    transform: translateX(50%);
+    min-width: 150px;
+    padding: 10px 15px;
+    font-size: 14px;
+  }
+}
+@media (max-width: 400px) {
+  .results-page #messageBox {
+    font-size: 13px;
+    padding: 8px 12px;
+    gap: 6px;
+  }
+}
+
+/* ====== CONTENT ====== */
+.results-page .content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.results-page .results, .results-page .chart {
+  flex: 1 1 45%;
+  background: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+}
+.results-page .results h3,
+.results-page .chart h3 {
+  margin-bottom: 14px;
+}
+
+/* ====== RESULTS LIST ====== */
+.results-page #resultsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.results-page #resultsList li {
+  background: #fafafa;
+  border-radius: 8px;
+  padding: 12px 15px;
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.results-page #resultsList li:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+.results-page #resultsList .info {
+  line-height: 1.4;
+  font-size: 14px;
+}
+.results-page #resultsList .actions {
+  display: flex;
+  gap: 8px;
+  flex-direction: column;
+}
+.results-page #resultsList button {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background 0.2s ease;
+}
+.results-page .editBtn { background: #ffd966; }
+.results-page .editBtn:hover { background: #ffcc33; }
+.results-page .deleteBtn { background: #ff6b6b; color: #fff; }
+.results-page .deleteBtn:hover { background: #e04e4e; }
+
+/* ====== MODAL ====== */
+.results-page #editModal {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 300px;
+  max-width: 90%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  z-index: 1000;
+  box-shadow: 0 0 20px #999;
+}
+.results-page #overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #00000066;
+  z-index: 900;
+}
+.results-page #editFields div {
+  margin-bottom: 10px;
+}
+.results-page #editFields label {
+  display: block;
+  margin-bottom: 3px;
+}
+.results-page #editFields input {
+  width: 100%;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+.results-page .modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+}
+.results-page .modal-buttons button {
+  padding: 6px 12px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+.results-page .modal-buttons button[type="submit"] { background: #4caf50; color: #fff; }
+.results-page .modal-buttons button[type="submit"]:hover { background: #45a049; }
+.results-page .modal-buttons button[type="button"] { background: #f44336; color: #fff; }
+.results-page .modal-buttons button[type="button"]:hover { background: #e53935; }
+
+/* ===== RESULTS CARD DETAILS ===== */
+
+.results-page .card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.results-page .child-name {
+  font-weight: bold;
+  font-size: 15px;
+  color: #333;
+}
+
+.results-page .type-badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.results-page .type-badge.blood {
+  background: #ffe5e5;
+  color: #c62828;
+}
+
+.results-page .type-badge.urine {
+  background: #e3f2fd;
+  color: #1565c0;
+}
+
+.results-page .type-badge.vitamin {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.results-page .values {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 8px 0;
+}
+
+.results-page .value-chip {
+  background: #f1f3f6;
+  padding: 6px 10px;
+  border-radius: 16px;
+  font-size: 13px;
+}
+
+.results-page .value-chip strong {
+  color: #333;
+}
+
+.results-page .date {
+  font-size: 12px;
+  color: #777;
+}
+
+
+/* ====== RESPONSIVE ====== */
+@media screen and (max-width: 768px) {
+  .results-page .content { flex-direction: column; }
+  .results-page .results, .results-page .chart { flex: 1 1 100%; }
+}
+/*----------results.html end ---------- */

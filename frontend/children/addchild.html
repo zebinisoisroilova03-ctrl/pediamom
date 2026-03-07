@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Add Child</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="addchild-page">
+
+  <h2>Add Child</h2>
+  <div id="addChildMessageBox"></div>
+
+  <form id="childForm">
+    <input type="text" id="name" placeholder="Child name" required />
+
+    <input type="number" id="age" placeholder="Age" required />
+
+    <select id="gender" required>
+      <option value="">Select gender</option>
+      <option value="male">Male</option>
+      <option value="female">Female</option>
+    </select>
+
+    <button type="submit">Submit</button>
+  </form>
+  </div>
+
+  <script type="module" src="../js/addchild.js"></script>
+</body>
+</html>

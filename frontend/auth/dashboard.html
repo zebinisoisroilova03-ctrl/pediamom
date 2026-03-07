@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>PediaMom | Dashboard</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="dashboard-page">
+
+  <div class="dashboard-layout" id="dashboardPage">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <img src="../assets/logo_padiamom.png" alt="PediaMom" class="sidebar-logo">
+        <span>PediaMom</span>
+      </div>
+
+      <nav class="menu">
+        <a class="menu-item active" data-page="home">🏠 Dashboard</a>
+        <a class="menu-item" data-page="children">👶 Children</a>
+        <a class="menu-item" data-page="medicines">💊 Medicines</a>
+        <a class="menu-item" data-page="checklist">📋 Checklist</a>
+        <a class="menu-item" data-page="addanalysis">🧪 Add Analysis</a>
+        <a class="menu-item" data-page="results">📈 Results</a>
+        <a class="menu-item" data-page="settings">⚙️ Settings</a>
+      </nav>
+
+      <button id="logoutBtn" class="logout-btn">Logout</button>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+      <div id="page-content">
+      <h1>Welcome back 👋</h1>
+
+      <div class="cards">
+
+        <div class="card">
+          <h3>Children</h3>
+          <p>Manage your children profiles</p>
+        </div>
+
+        <div class="card">
+          <h3>Medicines</h3>
+          <p>Track medicine schedules</p>
+        </div>
+
+        <div class="card">
+          <h3>Checklist</h3>
+          <p>View growth trends</p>
+        </div>
+
+      </div>
+      </div>
+    </main>
+
+  </div>
+    <!-- 🔴 CONFIRM DELETE MODAL (GLOBAL FOR DASHBOARD) -->
+  <div id="confirmModal" class="pm-modal hidden">
+    <div class="pm-modal-box">
+      <p id="confirmText">Are you sure?</p>
+
+      <div class="pm-modal-actions">
+        <button id="confirmYes" class="pm-danger">Delete</button>
+        <button id="confirmNo">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="../js/firebase.js"></script>
+  <script type="module" src="../js/auth.js"></script>
+  <script type="module" src="../js/dashboard.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</body>
+</html>
