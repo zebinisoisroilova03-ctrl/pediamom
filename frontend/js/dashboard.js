@@ -123,6 +123,63 @@ children: `<div class="children-page">
   </div>
 </div>
 `,
+
+    knowledgebase: `
+  <div class="knowledge-page">
+    <div class="kb-container">
+      <div class="kb-header">
+        <h2>Knowledge Base</h2>
+        <p>Helpful educational content for parents</p>
+      </div>
+
+      <div id="kbHomeView">
+        <div class="kb-categories">
+          <button class="kb-category-card" data-category="harmful">
+            <span class="kb-icon">⚠️</span>
+            <h3>Harmful Medicines</h3>
+            <p>Important warnings about unsafe medicine use for children.</p>
+          </button>
+
+          <button class="kb-category-card" data-category="immunity">
+            <span class="kb-icon">🛡️</span>
+            <h3>Immunity Tips</h3>
+            <p>Simple ways to support your child’s immunity and daily health.</p>
+          </button>
+
+          <button class="kb-category-card" data-category="vaccines">
+            <span class="kb-icon">💉</span>
+            <h3>Vaccines Info</h3>
+            <p>Basic vaccine education and guidance for parents.</p>
+          </button>
+        </div>
+      </div>
+
+      <div id="kbListView" class="hidden">
+        <div class="kb-topbar">
+          <button id="kbBackToHome" class="kb-back-btn">← Back</button>
+          <h3 id="kbCategoryTitle"></h3>
+        </div>
+        <div id="kbArticlesList" class="kb-articles-list"></div>
+      </div>
+
+      <div id="kbDetailView" class="hidden">
+        <div class="kb-topbar">
+          <button id="kbBackToList" class="kb-back-btn">← Back</button>
+        </div>
+
+        <article class="kb-article-detail">
+          <h3 id="kbDetailTitle"></h3>
+          <p id="kbDetailSummary" class="kb-summary"></p>
+
+          <div id="kbDetailWarning" class="kb-warning hidden"></div>
+
+          <div id="kbDetailContent" class="kb-content"></div>
+        </article>
+      </div>
+    </div>
+  </div>
+`,
+
     addanalysis: `
   <div class="addanalysis">
     <div class="container">
@@ -270,6 +327,15 @@ children: `<div class="children-page">
       if (pageKey === "results") {
         const module = await import("./results.module.js");
         module.initResultsModule();
+      }
+
+      if (pageKey === "knowledgebase") {
+        const module = await import("./knowledgebase.module.js");
+        module.initKnowledgeBaseModule();
+
+      if (typeof module.destroyKnowledgeBaseModule === "function") {
+        window.__destroyCurrentPage = module.destroyKnowledgeBaseModule;
+      }
       }
     });
   });
