@@ -1,6 +1,8 @@
 // dashboard.js
-import { auth } from "./firebase.js";
+import { auth, db } from "./firebase.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
 
 document.addEventListener("DOMContentLoaded", () => {
   const dashboard = document.getElementById("dashboardPage");
@@ -288,6 +290,14 @@ children: `<div class="children-page">
   </div>
 `,
 
+    admin: `
+  <div class="admin-page container">
+    <h2>👑 Admin Panel</h2>
+    <p>Manage Knowledge Base Articles</p>
+    <div id="adminContent"></div>
+  </div>
+`,
+
     settings: `
       <h1>⚙️ Settings</h1>
       <p>User settings will be here</p>
@@ -299,6 +309,46 @@ children: `<div class="children-page">
   ====================== */
   content.innerHTML = pages.home;
 
+  /* ======================
+   AUTH + ROLE CHECK
+====================== */
+
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    window.location.href = "../auth/login.html";
+    return;
+  }
+
+  const adminMenu = document.getElementById("adminMenu");
+  if (!adminMenu) return;
+
+  try {
+    const userRef = doc(db, "users", user.uid);
+    const userSnap = await getDoc(userRef);
+
+    console.log("Current UID:", user.uid);
+    console.log("User doc exists:", userSnap.exists());
+
+    if (!userSnap.exists()) {
+      console.log("NO USER DOCUMENT IN FIRESTORE");
+      adminMenu.classList.add("hidden");
+      return;
+    }
+
+    const role = userSnap.data().role;
+    console.log("Role:", role);
+
+    if (role === "admin") {
+      adminMenu.classList.remove("hidden");
+    } else {
+      adminMenu.classList.add("hidden");
+    }
+
+  } catch (error) {
+    console.error("Role check error:", error);
+    adminMenu.classList.add("hidden");
+  }
+});
   /* ======================
    MENU NAVIGATION
 ====================== */
@@ -369,6 +419,11 @@ menuItems.forEach(item => {
       const module = await import("./savedarticles.module.js");
       module.initSavedArticlesModule();
     }
+
+    if (pageKey === "admin") {
+      const module = await import("./admin.module.js");
+      module.initAdminModule();
+    }
   });
 });
   /* ======================
@@ -382,11 +437,3 @@ menuItems.forEach(item => {
   }
 });
 
-/* ======================
-   AUTH GUARD
-====================== */
-onAuthStateChanged(auth, user => {
-  if (!user) {
-    window.location.href = "../auth/login.html";
-  }
-});

@@ -1,10 +1,19 @@
 import { auth } from "./firebase.js";
+import { db } from "./firebase.js";
+
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   onAuthStateChanged,
   signOut
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+  setDoc,
+  doc,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
 
 /* =======================
    AUTH GUARD (FINAL)
@@ -33,71 +42,81 @@ onAuthStateChanged(auth, (user) => {
     return;
   }
 
-  // ✅ AUTH PAGE (login / register) — faqat ruxsat bo‘lsa ko‘rsat
+  // ✅ AUTH PAGE
   const authPage = document.getElementById("authPage");
   if (authPage) {
     authPage.style.display = "block";
   }
 
-  // ✅ INDEX (landing) — faqat ruxsat bo‘lsa ko‘rsat
+  // ✅ INDEX
   if (isIndex) {
     const app = document.getElementById("app");
     if (app) app.style.display = "block";
   }
 });
 
-
 /* =======================
-   REGISTER
+   DOM READY
 ======================= */
-const registerForm = document.getElementById("registerForm");
+document.addEventListener("DOMContentLoaded", () => {
+
+  /* ========= REGISTER ========= */
+  const registerForm = document.getElementById("registerForm");
 
 if (registerForm) {
-  registerForm.addEventListener("submit", (e) => {
+  registerForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
+    const email = registerForm.querySelector("#email").value;
+    const password = registerForm.querySelector("#password").value;
 
-    createUserWithEmailAndPassword(auth, email, password)
-      .then(() => {
-        window.location.href = "./dashboard.html";
-      })
-      .catch((err) => alert(err.message));
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+      const user = userCredential.user;
+
+      console.log("Creating Firestore doc for:", user.uid);
+
+      await setDoc(
+        doc(db, "users", user.uid),
+        {
+          email: user.email,
+          role: "parent",
+          createdAt: serverTimestamp()
+        }
+      );
+
+      console.log("Firestore document successfully created");
+
+      window.location.href = "./dashboard.html";
+
+    } catch (err) {
+      console.error("REGISTER ERROR:", err);
+      alert(err.message);
+    }
   });
 }
+  /* ========= LOGIN ========= */
+  const loginForm = document.getElementById("loginForm");
 
+  if (loginForm) {
+    loginForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
 
-/* =======================
-   LOGIN
-======================= */
-const loginForm = document.getElementById("loginForm");
+      const email = loginForm.querySelector("#email").value;
+      const password = loginForm.querySelector("#password").value;
 
-if (loginForm) {
-  loginForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-
-    signInWithEmailAndPassword(auth, email, password)
-      .then(() => {
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
         window.location.href = "./dashboard.html";
-      })
-      .catch((err) => alert(err.message));
-  });
-}
-
-
-/* =======================
-   LOGOUT
-======================= */
-const logoutBtn = document.getElementById("logoutBtn");
-
-if (logoutBtn) {
-  logoutBtn.addEventListener("click", () => {
-    signOut(auth).then(() => {
-      window.location.href = "../index.html";
+      } catch (err) {
+        alert(err.message);
+      }
     });
-  });
-}
+  }
+
+});
