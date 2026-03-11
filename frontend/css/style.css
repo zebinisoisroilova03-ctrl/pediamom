@@ -1810,6 +1810,677 @@ button.primary:hover {
   background: #1c6cd4;
 }
 /*admin page*/
-.hidden {
+.dashboard-page .menu-item.hidden {
   display: none;
+}
+
+/* =========================
+   ADMIN PANEL
+========================= */
+.admin-page {
+  background: #f4f6f9;
+  min-height: 100%;
+  padding: 20px;
+}
+
+.admin-toolbar {
+  margin: 16px 0 20px;
+}
+
+.admin-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.admin-card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 18px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+}
+
+.admin-card h4 {
+  margin-bottom: 8px;
+  color: #1e293b;
+  font-size: 18px;
+}
+
+.admin-meta {
+  color: #64748b;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.admin-summary {
+  color: #334155;
+  font-size: 14px;
+  margin-bottom: 14px;
+}
+
+.admin-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.admin-actions .editBtn,
+.admin-actions .deleteBtn {
+  border: none;
+  border-radius: 10px;
+  padding: 8px 14px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.admin-actions .editBtn {
+  background: #e0e7ff;
+  color: #1d4ed8;
+}
+
+.admin-actions .deleteBtn {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.admin-form {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 14px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.admin-form h3 {
+  margin-bottom: 8px;
+  color: #2563eb;
+}
+
+.admin-form label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.admin-form input,
+.admin-form select,
+.admin-form textarea {
+  width: 100%;
+  padding: 11px 12px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+  background: #ffffff;
+}
+
+.admin-form input:focus,
+.admin-form select:focus,
+.admin-form textarea:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+}
+
+.admin-form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.admin-status {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.admin-status.published {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.admin-status.draft {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+/* =========================
+   PREGNANCY MODULE
+========================= */
+.pregnancy-page {
+  background: #f4f6f9;
+  min-height: 100%;
+  padding: 20px;
+}
+
+.pregnancy-page .container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.pregnancy-page h2 {
+  text-align: center;
+  color: #2563eb;
+  margin-bottom: 20px;
+  font-size: 28px;
+}
+
+.pregnancy-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 18px;
+}
+
+.pregnancy-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+}
+
+.pregnancy-card h3 {
+  margin-bottom: 12px;
+  color: #1e293b;
+}
+
+.pregnancy-card p {
+  color: #334155;
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+
+.pregnancy-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pregnancy-card input,
+.pregnancy-card textarea,
+.pregnancy-card select {
+  width: 100%;
+  padding: 11px 12px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+}
+
+.pregnancy-card input:focus,
+.pregnancy-card textarea:focus,
+.pregnancy-card select:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+}
+
+.pregnancy-card button {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  padding: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.pregnancy-milestones {
+  padding-left: 18px;
+  color: #334155;
+  line-height: 1.8;
+}
+
+.pregnancy-form-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.pregnancy-card.hidden {
+  display: none;
+}
+
+/* =========================
+   MOTHER HEALTH MODULE
+========================= */
+/* =========================
+   MOTHER HEALTH MODULE - PREMIUM UI
+========================= */
+.mother-health-page {
+  background: linear-gradient(180deg, #f8fbff 0%, #f3f7fc 100%);
+  min-height: 100%;
+  padding: 28px;
+}
+
+.mother-health-page .container {
+  max-width: 1120px;
+  margin: 0 auto;
+}
+
+.mother-health-page h2 {
+  text-align: center;
+  color: #2563eb;
+  margin-bottom: 24px;
+  font-size: 38px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+/* top intro block */
+.mother-health-hero {
+  background: linear-gradient(135deg, #ffffff, #f8fbff);
+  border: 1px solid #e5eefb;
+  border-radius: 24px;
+  padding: 22px 24px;
+  margin-bottom: 22px;
+  box-shadow: 0 12px 30px rgba(37, 99, 235, 0.06);
+}
+
+.mother-health-hero h3 {
+  font-size: 22px;
+  color: #0f172a;
+  margin-bottom: 8px;
+}
+
+.mother-health-hero p {
+  color: #64748b;
+  line-height: 1.6;
+  font-size: 15px;
+}
+
+/* summary strip */
+.mother-health-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.mother-summary-card {
+  background: #ffffff;
+  border: 1px solid #e8eef8;
+  border-radius: 22px;
+  padding: 20px;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
+}
+
+.mother-summary-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 10px;
+}
+
+.mother-summary-value {
+  font-size: 28px;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.1;
+}
+
+.mother-summary-sub {
+  margin-top: 8px;
+  color: #64748b;
+  font-size: 14px;
+}
+
+/* grid */
+.mother-health-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.mother-health-card {
+  grid-column: span 6;
+  background: #ffffff;
+  border: 1px solid #e8eef8;
+  border-radius: 24px;
+  padding: 22px;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.05);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.mother-health-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 34px rgba(15, 23, 42, 0.08);
+}
+
+.mother-health-card.wide {
+  grid-column: span 12;
+}
+
+.mother-health-card h3 {
+  margin-bottom: 14px;
+  color: #0f172a;
+  font-size: 25px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+}
+
+.mother-health-card p.mother-card-hint {
+  color: #64748b;
+  font-size: 14px;
+  margin-bottom: 14px;
+  line-height: 1.5;
+}
+
+.mother-health-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.mother-health-card input,
+.mother-health-card textarea {
+  width: 100%;
+  padding: 14px 15px;
+  border-radius: 16px;
+  border: 1px solid #d8e1ec;
+  font-size: 15px;
+  background: #f8fbff;
+  color: #0f172a;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.mother-health-card input:focus,
+.mother-health-card textarea:focus {
+  outline: none;
+  border-color: #2563eb;
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+}
+
+.mother-health-card textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.mother-health-card button {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #ffffff;
+  border: none;
+  border-radius: 16px;
+  padding: 13px 16px;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  box-shadow: 0 10px 20px rgba(37, 99, 235, 0.22);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.mother-health-card button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 24px rgba(37, 99, 235, 0.28);
+}
+
+.mother-health-card button:active {
+  transform: scale(0.98);
+}
+
+/* special cards */
+.mother-health-card.appointment-highlight {
+  background: linear-gradient(135deg, #eff6ff, #ffffff);
+  border: 1px solid #bfdbfe;
+}
+
+.mother-health-card.water-card input {
+  text-align: center;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.mother-health-card.wide-notes {
+  grid-column: span 6;
+}
+
+.ai-advice-card {
+  background: linear-gradient(135deg, #f8fbff, #ffffff);
+  border: 1px dashed #bfd5ff;
+}
+
+.ai-advice-placeholder {
+  min-height: 140px;
+  border-radius: 16px;
+  background: #f8fbff;
+  border: 1px solid #dbeafe;
+  padding: 16px;
+  color: #64748b;
+  line-height: 1.6;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+}
+
+.mother-health-summary-editable {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(280px, 1fr));
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+.editable-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.summary-date {
+  font-size: 20px !important;
+}
+
+.summary-inline-form {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.summary-inline-form input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid #d8e1ec;
+  background: #f8fbff;
+  font-size: 14px;
+}
+
+.summary-inline-form input:focus {
+  outline: none;
+  border-color: #2563eb;
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+}
+
+.summary-inline-actions {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.summary-inline-actions button {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+  padding: 10px 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.top-grid {
+  margin-bottom: 18px;
+}
+
+.supplements-wide-card {
+  grid-column: span 12;
+}
+
+.supplements-header {
+  margin-bottom: 14px;
+}
+
+.add-supplement-form {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.add-supplement-form input {
+  width: 100%;
+  padding: 13px 14px;
+  border-radius: 14px;
+  border: 1px solid #d8e1ec;
+  background: #f8fbff;
+  font-size: 14px;
+}
+
+.add-supplement-form input:focus {
+  outline: none;
+  border-color: #2563eb;
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+}
+
+.add-supplement-form button {
+  padding: 13px 18px;
+  border-radius: 14px;
+  border: none;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.supplements-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0;
+  margin: 0;
+}
+
+.supplement-item {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid #e5edf8;
+  border-radius: 16px;
+  background: #f8fbff;
+}
+
+.supplement-check {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.supplement-check input {
+  display: none;
+}
+
+.custom-check {
+  width: 18px;
+  height: 18px;
+  border-radius: 6px;
+  border: 2px solid #94a3b8;
+  background: #ffffff;
+  position: relative;
+}
+
+.supplement-check input:checked + .custom-check {
+  background: #2563eb;
+  border-color: #2563eb;
+}
+
+.supplement-check input:checked + .custom-check::after {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 0px;
+  width: 5px;
+  height: 10px;
+  border: solid #ffffff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.supplement-name-wrap {
+  min-width: 0;
+}
+
+.supplement-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.supplement-name.taken {
+  text-decoration: line-through;
+  color: #64748b;
+}
+
+.supplement-delete {
+  border: none;
+  background: #fee2e2;
+  color: #b91c1c;
+  padding: 8px 12px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.empty-supplements {
+  padding: 14px;
+  border-radius: 14px;
+  background: #f8fbff;
+  color: #64748b;
+  border: 1px dashed #cbd5e1;
+}
+
+@media (max-width: 900px) {
+  .mother-health-summary-editable {
+    grid-template-columns: 1fr;
+  }
+
+  .add-supplement-form {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* responsive */
+@media (max-width: 900px) {
+  .mother-health-card {
+    grid-column: span 12;
+  }
+
+  .mother-health-page h2 {
+    font-size: 30px;
+  }
+}
+
+@media (max-width: 600px) {
+  .mother-health-page {
+    padding: 16px;
+  }
+
+  .mother-health-card,
+  .mother-summary-card,
+  .mother-health-hero {
+    border-radius: 18px;
+    padding: 18px;
+  }
+
+  .mother-health-page h2 {
+    font-size: 26px;
+  }
 }

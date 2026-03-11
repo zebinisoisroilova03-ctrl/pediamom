@@ -1,8 +1,8 @@
 // dashboard.js
-import { auth, db } from "./firebase.js";
+import { auth } from "./firebase.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+const ADMIN_UID = "rqPzKRFZ4CM4e5TnKgIhWuN0aVs2";
 
 document.addEventListener("DOMContentLoaded", () => {
   const dashboard = document.getElementById("dashboardPage");
@@ -191,6 +191,15 @@ children: `<div class="children-page">
 </div>
 `,
 
+    pregnancy: `
+  <div class="pregnancy-page">
+    <div class="container">
+      <h2>Pregnancy Calendar</h2>
+      <div id="pregnancyContent"></div>
+    </div>
+  </div>
+`,
+
     addanalysis: `
   <div class="addanalysis">
     <div class="container">
@@ -290,6 +299,15 @@ children: `<div class="children-page">
   </div>
 `,
 
+    motherhealth: `
+  <div class="mother-health-page">
+    <div class="container">
+      <h2>Mother Health Tracker</h2>
+      <div id="motherHealthContent"></div>
+    </div>
+  </div>
+`,
+
     admin: `
   <div class="admin-page container">
     <h2>👑 Admin Panel</h2>
@@ -309,10 +327,10 @@ children: `<div class="children-page">
   ====================== */
   content.innerHTML = pages.home;
 
-  /* ======================
+ 
+/* ======================
    AUTH + ROLE CHECK
 ====================== */
-
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
     window.location.href = "../auth/login.html";
@@ -322,31 +340,12 @@ onAuthStateChanged(auth, async (user) => {
   const adminMenu = document.getElementById("adminMenu");
   if (!adminMenu) return;
 
-  try {
-    const userRef = doc(db, "users", user.uid);
-    const userSnap = await getDoc(userRef);
+  // default: hide
+  adminMenu.classList.add("hidden");
 
-    console.log("Current UID:", user.uid);
-    console.log("User doc exists:", userSnap.exists());
-
-    if (!userSnap.exists()) {
-      console.log("NO USER DOCUMENT IN FIRESTORE");
-      adminMenu.classList.add("hidden");
-      return;
-    }
-
-    const role = userSnap.data().role;
-    console.log("Role:", role);
-
-    if (role === "admin") {
-      adminMenu.classList.remove("hidden");
-    } else {
-      adminMenu.classList.add("hidden");
-    }
-
-  } catch (error) {
-    console.error("Role check error:", error);
-    adminMenu.classList.add("hidden");
+  // faqat bitta UID admin
+  if (user.uid === ADMIN_UID) {
+    adminMenu.classList.remove("hidden");
   }
 });
   /* ======================
@@ -406,6 +405,16 @@ menuItems.forEach(item => {
       }
     }
 
+    if (pageKey === "pregnancy") {
+      const module = await import("./pregnancy.module.js");
+      module.initPregnancyModule();
+    }
+
+    if (pageKey === "motherhealth") {
+  const module = await import("./motherhealth.module.js");
+  module.initMotherHealthModule();
+}
+
     if (pageKey === "knowledgebase") {
       const module = await import("./knowledgebase.module.js");
       module.initKnowledgeBaseModule();
@@ -421,9 +430,19 @@ menuItems.forEach(item => {
     }
 
     if (pageKey === "admin") {
-      const module = await import("./admin.module.js");
-      module.initAdminModule();
-    }
+     if (auth.currentUser?.uid !== ADMIN_UID) {
+      content.innerHTML = `
+      <div class="admin-page container">
+        <h2>Access denied</h2>
+        <p>You are not allowed to open this page.</p>
+      </div>
+    `;
+    return;
+  }
+
+  const module = await import("./admin.module.js");
+  module.initAdminModule();
+}
   });
 });
   /* ======================
