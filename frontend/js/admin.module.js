@@ -2,238 +2,246 @@ import { db } from "./firebase.js";
 import {
   collection,
   getDocs,
-  addDoc,
-  updateDoc,
   deleteDoc,
   doc,
+  addDoc,
+  updateDoc,
+  serverTimestamp,
   query,
   orderBy,
-  serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-let articles = [];
-let editingId = null;
+let allArticles = [];
+let searchDebounceTimer = null;
 
-export async function initAdminModule() {
-  const container = document.getElementById("adminContent");
-  if (!container) return;
+export function initAdminModule() {
+  loadArticles();
+  setupSearch();
+  setupCategoryFilter();
 
-  container.innerHTML = `
-    <div class="admin-toolbar">
-      <button id="addArticleBtn" class="primary">➕ Add Article</button>
-    </div>
-
-    <div id="adminFormWrap" class="hidden"></div>
-    <div id="adminArticlesList"></div>
-  `;
-
-  const addBtn = document.getElementById("addArticleBtn");
+  const addBtn = document.getElementById("adminAddBtn");
   if (addBtn) {
-    addBtn.addEventListener("click", () => openArticleForm());
+    addBtn.addEventListener("click", openAddArticleModal);
   }
-
-  await loadArticles();
 }
 
 async function loadArticles() {
-  const list = document.getElementById("adminArticlesList");
-  if (!list) return;
-
-  list.innerHTML = `<p>Loading articles...</p>`;
-
   try {
-    const q = query(
-      collection(db, "knowledge_base"),
-      orderBy("order", "asc")
-    );
-
-    const snap = await getDocs(q);
-
-    articles = snap.docs.map((d) => ({
-      id: d.id,
-      ...d.data()
-    }));
-
-    renderArticles();
-  } catch (error) {
-    console.error("Admin load error:", error);
-    list.innerHTML = `<p>Could not load articles.</p>`;
+    const q = query(collection(db, "knowledge_base"), orderBy("order", "asc"));
+    const snapshot = await getDocs(q);
+    allArticles = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+    applyFilters();
+  } catch (err) {
+    console.error("loadArticles error:", err);
+    const list = document.getElementById("adminArticlesList");
+    if (list) list.innerHTML = `<p style="color:#ef4444;padding:20px;">Failed to load articles.</p>`;
   }
 }
 
-function renderArticles() {
+export function filterArticles(articles, searchQuery, category) {
+  const q = (searchQuery || "").toLowerCase().trim();
+  const cat = (category || "").trim();
+  return articles.filter((a) => {
+    const title = (a.title || "").toLowerCase();
+    const articleCat = (a.category || "").toLowerCase();
+    const matchesQuery = q === "" || title.includes(q) || articleCat.includes(q);
+    const matchesCategory = cat === "" || a.category === cat;
+    return matchesQuery && matchesCategory;
+  });
+}
+
+export function renderArticles(articles) {
   const list = document.getElementById("adminArticlesList");
   if (!list) return;
 
   if (articles.length === 0) {
-    list.innerHTML = `<p>No articles found.</p>`;
+    list.innerHTML = `<div class="admin-no-results">No articles found</div>`;
     return;
   }
 
-  list.innerHTML = `
-    <div class="admin-list">
-      ${articles.map((article) => `
-        <div class="admin-card">
-          <div class="admin-card-top">
-            <div>
-              <h4>${escapeHtml(article.title || "Untitled")}</h4>
-              <p class="admin-meta">
-                Category: <strong>${escapeHtml(article.category || "-")}</strong>
-                • Order: <strong>${article.order ?? 0}</strong>
-                • Status:
-                <span class="admin-status ${article.status === "published" ? "published" : "draft"}">
-                  ${escapeHtml(article.status || "draft")}
-                </span>
-              </p>
-            </div>
-          </div>
+  list.innerHTML = articles.map((a) => `
+    <div class="admin-article-item">
+      <h4>${escapeHtml(a.title || "Untitled")}</h4>
+      <div class="admin-article-meta">
+        Category: <strong>${escapeHtml(a.category || "—")}</strong>
+        &nbsp;•&nbsp; Order: <strong>${a.order || "—"}</strong>
+        &nbsp;•&nbsp; Status: <span style="color:${a.status === 'published' ? '#166534' : '#92400e'};font-weight:600;">${escapeHtml(a.status || "draft").toUpperCase()}</span>
+      </div>
+      <p style="font-size:14px;color:#475569;margin-bottom:10px;">${escapeHtml(a.summary || "")}</p>
+      <div class="admin-article-actions">
+        <button class="admin-edit-btn" data-id="${a.id}">✏️ Edit</button>
+        <button class="admin-delete-btn" data-id="${a.id}">🗑️ Delete</button>
+      </div>
+    </div>
+  `).join("");
 
-          <p class="admin-summary">${escapeHtml(article.summary || "")}</p>
+  list.querySelectorAll(".admin-delete-btn").forEach((btn) => {
+    btn.addEventListener("click", () => deleteArticle(btn.dataset.id));
+  });
+  list.querySelectorAll(".admin-edit-btn").forEach((btn) => {
+    btn.addEventListener("click", () => openEditArticleModal(btn.dataset.id));
+  });
+}
 
-          <div class="admin-actions">
-            <button class="editBtn" data-id="${article.id}">Edit</button>
-            <button class="deleteBtn" data-id="${article.id}">Delete</button>
-          </div>
+function setupSearch() {
+  const searchInput = document.getElementById("adminSearch");
+  if (!searchInput) return;
+  searchInput.addEventListener("input", () => {
+    clearTimeout(searchDebounceTimer);
+    searchDebounceTimer = setTimeout(() => applyFilters(), 300);
+  });
+}
+
+function setupCategoryFilter() {
+  const categorySelect = document.getElementById("adminCategoryFilter");
+  if (!categorySelect) return;
+  categorySelect.addEventListener("change", () => applyFilters());
+}
+
+function applyFilters() {
+  const searchInput = document.getElementById("adminSearch");
+  const categorySelect = document.getElementById("adminCategoryFilter");
+  const q = searchInput ? searchInput.value : "";
+  const category = categorySelect ? categorySelect.value : "";
+  renderArticles(filterArticles(allArticles, q, category));
+}
+
+export function openAddArticleModal() {
+  const existing = document.getElementById("adminArticleModal");
+  if (existing) existing.remove();
+
+  const modal = document.createElement("div");
+  modal.id = "adminArticleModal";
+  modal.className = "admin-modal-overlay";
+  modal.innerHTML = `
+    <div class="admin-modal-box">
+      <h3>Add New Article</h3>
+      <form id="adminArticleForm">
+        <input type="text" id="articleTitle" placeholder="Title" required />
+        <input type="text" id="articleSummary" placeholder="Summary" required />
+        <textarea id="articleContent" placeholder="Content" rows="4" required></textarea>
+        <select id="articleCategory" required>
+          <option value="">Select category</option>
+          <option value="harmful">Harmful</option>
+          <option value="immunity">Immunity</option>
+          <option value="vaccines">Vaccines</option>
+          <option value="herbal">Herbal</option>
+          <option value="nutrition">Nutrition</option>
+          <option value="sleep">Sleep</option>
+        </select>
+        <select id="articleStatus">
+          <option value="published">Published</option>
+          <option value="draft">Draft</option>
+        </select>
+        <div class="admin-modal-actions">
+          <button type="submit" class="admin-add-btn">Save Article</button>
+          <button type="button" id="closeAdminModal">Cancel</button>
         </div>
-      `).join("")}
+      </form>
     </div>
   `;
-
-  bindArticleActions();
-}
-
-function bindArticleActions() {
-  document.querySelectorAll(".editBtn").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const id = btn.dataset.id;
-      const article = articles.find((a) => a.id === id);
-      if (article) {
-        editingId = id;
-        openArticleForm(article);
-      }
-    });
-  });
-
-  document.querySelectorAll(".deleteBtn").forEach((btn) => {
-    btn.addEventListener("click", async () => {
-      const id = btn.dataset.id;
-      const confirmed = confirm("Delete this article?");
-      if (!confirmed) return;
-
-      try {
-        await deleteDoc(doc(db, "knowledge_base", id));
-        await loadArticles();
-      } catch (error) {
-        console.error("Delete error:", error);
-        alert("Could not delete article.");
-      }
-    });
-  });
-}
-
-function openArticleForm(article = null) {
-  const wrap = document.getElementById("adminFormWrap");
-  if (!wrap) return;
-
-  wrap.classList.remove("hidden");
-
-  wrap.innerHTML = `
-    <form id="adminArticleForm" class="admin-form">
-      <h3>${article ? "Edit Article" : "Add New Article"}</h3>
-
-      <label>Title</label>
-      <input type="text" id="adminTitle" value="${escapeAttr(article?.title || "")}" required>
-
-      <label>Category</label>
-      <select id="adminCategory" required>
-        <option value="harmful" ${article?.category === "harmful" ? "selected" : ""}>Harmful</option>
-        <option value="immunity" ${article?.category === "immunity" ? "selected" : ""}>Immunity</option>
-        <option value="vaccines" ${article?.category === "vaccines" ? "selected" : ""}>Vaccines</option>
-      </select>
-
-      <label>Summary</label>
-      <textarea id="adminSummary" rows="2" required>${escapeHtml(article?.summary || "")}</textarea>
-
-      <label>Content</label>
-      <textarea id="adminContentText" rows="8" required>${escapeHtml(article?.content || "")}</textarea>
-
-      <label>Warning</label>
-      <textarea id="adminWarning" rows="2">${escapeHtml(article?.warning || "")}</textarea>
-
-      <label>Order</label>
-      <input type="number" id="adminOrder" value="${article?.order ?? 1}" min="1" required>
-
-      <label>Status</label>
-      <select id="adminStatus" required>
-        <option value="published" ${article?.status === "published" ? "selected" : ""}>Published</option>
-        <option value="draft" ${article?.status === "draft" ? "selected" : ""}>Draft</option>
-      </select>
-
-      <div class="admin-form-actions">
-        <button type="submit" class="primary">${article ? "Update" : "Save"}</button>
-        <button type="button" id="cancelAdminForm">Cancel</button>
-      </div>
-    </form>
-  `;
-
-  const form = document.getElementById("adminArticleForm");
-  const cancelBtn = document.getElementById("cancelAdminForm");
-
-  cancelBtn?.addEventListener("click", () => {
-    wrap.innerHTML = "";
-    wrap.classList.add("hidden");
-    editingId = null;
-  });
-
-  form?.addEventListener("submit", async (e) => {
+  document.body.appendChild(modal);
+  document.getElementById("closeAdminModal").addEventListener("click", () => modal.remove());
+  modal.addEventListener("click", (e) => { if (e.target === modal) modal.remove(); });
+  document.getElementById("adminArticleForm").addEventListener("submit", async (e) => {
     e.preventDefault();
+    await saveNewArticle();
+    modal.remove();
+  });
+}
 
-    const payload = {
-      title: document.getElementById("adminTitle").value.trim(),
-      category: document.getElementById("adminCategory").value,
-      summary: document.getElementById("adminSummary").value.trim(),
-      content: document.getElementById("adminContentText").value.trim(),
-      warning: document.getElementById("adminWarning").value.trim(),
-      order: Number(document.getElementById("adminOrder").value),
-      status: document.getElementById("adminStatus").value
-    };
+async function saveNewArticle() {
+  try {
+    await addDoc(collection(db, "knowledge_base"), {
+      title: document.getElementById("articleTitle").value.trim(),
+      summary: document.getElementById("articleSummary").value.trim(),
+      content: document.getElementById("articleContent").value.trim(),
+      category: document.getElementById("articleCategory").value,
+      status: document.getElementById("articleStatus").value,
+      order: allArticles.length + 1,
+      createdAt: serverTimestamp(),
+    });
+    await loadArticles();
+  } catch (err) {
+    console.error("saveNewArticle error:", err);
+    alert("Failed to save article.");
+  }
+}
 
-    if (!payload.title || !payload.summary || !payload.content) {
-      alert("Please fill all required fields.");
-      return;
-    }
+function openEditArticleModal(id) {
+  const article = allArticles.find((a) => a.id === id);
+  if (!article) return;
 
+  const existing = document.getElementById("adminArticleModal");
+  if (existing) existing.remove();
+
+  const modal = document.createElement("div");
+  modal.id = "adminArticleModal";
+  modal.className = "admin-modal-overlay";
+  modal.innerHTML = `
+    <div class="admin-modal-box">
+      <h3>Edit Article</h3>
+      <form id="adminEditForm">
+        <input type="text" id="editTitle" placeholder="Title" value="${escapeHtml(article.title || "")}" required />
+        <input type="text" id="editSummary" placeholder="Summary" value="${escapeHtml(article.summary || "")}" required />
+        <textarea id="editContent" placeholder="Content" rows="4" required>${escapeHtml(article.content || "")}</textarea>
+        <select id="editCategory" required>
+          <option value="">Select category</option>
+          ${["harmful","immunity","vaccines","herbal","nutrition","sleep"]
+            .map((c) => `<option value="${c}" ${article.category === c ? "selected" : ""}>${c.charAt(0).toUpperCase() + c.slice(1)}</option>`)
+            .join("")}
+        </select>
+        <select id="editStatus">
+          <option value="published" ${article.status === "published" ? "selected" : ""}>Published</option>
+          <option value="draft" ${article.status === "draft" ? "selected" : ""}>Draft</option>
+        </select>
+        <div class="admin-modal-actions">
+          <button type="submit" class="admin-add-btn">Update Article</button>
+          <button type="button" id="closeAdminModal">Cancel</button>
+        </div>
+      </form>
+    </div>
+  `;
+  document.body.appendChild(modal);
+  document.getElementById("closeAdminModal").addEventListener("click", () => modal.remove());
+  modal.addEventListener("click", (e) => { if (e.target === modal) modal.remove(); });
+  document.getElementById("adminEditForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
     try {
-      if (editingId) {
-        await updateDoc(doc(db, "knowledge_base", editingId), payload);
-      } else {
-        await addDoc(collection(db, "knowledge_base"), {
-          ...payload,
-          createdAt: serverTimestamp()
-        });
-      }
-
-      wrap.innerHTML = "";
-      wrap.classList.add("hidden");
-      editingId = null;
-
+      await updateDoc(doc(db, "knowledge_base", id), {
+        title: document.getElementById("editTitle").value.trim(),
+        summary: document.getElementById("editSummary").value.trim(),
+        content: document.getElementById("editContent").value.trim(),
+        category: document.getElementById("editCategory").value,
+        status: document.getElementById("editStatus").value,
+        updatedAt: serverTimestamp(),
+      });
       await loadArticles();
-    } catch (error) {
-      console.error("Save error:", error);
-      alert("Could not save article.");
+      modal.remove();
+    } catch (err) {
+      console.error("updateArticle error:", err);
+      alert("Failed to update article.");
     }
   });
 }
 
-function escapeHtml(value) {
-  return String(value ?? "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
+export async function deleteArticle(id) {
+  const confirmed = confirm("Are you sure you want to delete this article?");
+  if (!confirmed) return;
+  try {
+    await deleteDoc(doc(db, "knowledge_base", id));
+    allArticles = allArticles.filter((a) => a.id !== id);
+    applyFilters();
+  } catch (err) {
+    console.error("deleteArticle error:", err);
+    alert("Failed to delete article.");
+  }
 }
 
-function escapeAttr(value) {
-  return escapeHtml(value);
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
 }

@@ -1,10 +1,11 @@
 // results.module.js (FINAL, SPA-friendly)
 // ✅ Fixes:
 // 1) export initResultsModule() bor (dashboard.js dagi error ketadi)
-// 2) filter change’da qayta-qayta onAuthStateChanged qo‘ymaydi (memory leak yo‘q)
-// 3) page’dan chiqib ketganda DOM null bo‘lsa crash qilmaydi
-// 4) o‘chirilgan child natijalari UI’da ham, chart’da ham ko‘rinmaydi
+// 2) filter change'da qayta-qayta onAuthStateChanged qo'ymaydi (memory leak yo'q)
+// 3) page'dan chiqib ketganda DOM null bo'lsa crash qilmaydi
+// 4) o'chirilgan child natijalari UI'da ham, chart'da ham ko'rinmaydi
 // 5) child tanlanmaguncha trend umuman chiqmaydi (hint chiqadi)
+// 6) type === "" (All Types) holatida blood + vitamin bitta chartda ko'rsatiladi
 
 import { auth, db } from "./firebase.js";
 import {
@@ -31,7 +32,7 @@ let listenersAttached = false;
    PUBLIC API (Dashboard calls this)
 ====================== */
 export function initResultsModule() {
-  // SPA: page DOM hali render bo‘lganini tekshiramiz
+  // SPA: page DOM hali render bo'lganini tekshiramiz
   const resultsList = document.getElementById("resultsList");
   const childFilter = document.getElementById("childFilter");
   const typeFilter = document.getElementById("typeFilter");
@@ -40,7 +41,7 @@ export function initResultsModule() {
   const overlay = document.getElementById("overlay");
 
   if (!resultsList || !childFilter || !typeFilter || !editForm || !closeEdit || !overlay) {
-    // Results page DOM yo‘q bo‘lsa init qilmaymiz
+    // Results page DOM yo'q bo'lsa init qilmaymiz
     return;
   }
 
@@ -221,7 +222,7 @@ async function loadResults(parentId) {
     if (childFilter.value && result.childId !== childFilter.value) return;
     if (typeFilter.value && result.type !== typeFilter.value) return;
 
-    // ✅ bola o‘chgan bo‘lsa UI’da ko‘rsatmaymiz
+    // ✅ bola o'chgan bo'lsa UI'da ko'rsatmaymiz
     if (!childrenMap[result.childId]) return;
 
     const li = document.createElement("li");
@@ -279,8 +280,6 @@ function bindEditButtons() {
       const docId = e.currentTarget.dataset.id;
       currentEditDocId = docId;
 
-      // ❗ docni 1ta query bilan olish o‘rniga to‘g‘ridan doc() ishlatish ham mumkin
-      // lekin hozir senga minimal o‘zgarish bilan qoldirdim:
       const docSnap = await getDocs(
         query(collection(db, "medical_results"), where("__name__", "==", docId))
       );
@@ -330,68 +329,100 @@ function bindDeleteButtons(parentId) {
 /* ======================
    CHART
 ====================== */
-function drawTrendChart(results, type) {
+
+// Colors for known metric keys
+const DATASET_COLORS = {
+  hemoglobin: "rgba(54, 162, 235, 1)",   // blue
+  ferritin:   "rgba(255, 99, 132, 1)",   // pink
+  vitaminD:   "rgba(255, 159, 64, 1)",   // orange
+  vitaminB12: "rgba(153, 102, 255, 1)"   // purple
+};
+
+export function drawTrendChart(results, type) {
   const canvas = document.getElementById("trendChart");
-  if (!canvas) return;
+  if (!canvas) return null;
 
   const ctx = canvas.getContext("2d");
-  if (!ctx) return;
+  if (!ctx) return null;
 
-  const filtered = results.filter((r) => r.type === type);
+  // type === "" means All Types; otherwise filter by specific type
+  const filtered = type === ""
+    ? [...results]
+    : results.filter((r) => r.type === type);
 
   if (filtered.length === 0) {
     if (trendChart) {
       trendChart.destroy();
       trendChart = null;
     }
-    return;
+    return null;
   }
-
-  const labels = [];
-  const datasets = {};
 
   filtered.sort(
     (a, b) =>
       (a.createdAt?.toDate?.() || 0) - (b.createdAt?.toDate?.() || 0)
   );
 
+  // Build unified label list (M/D/YYYY format)
+  const labelSet = [];
   filtered.forEach((r) => {
-    labels.push(r.createdAt?.toDate?.().toLocaleDateString?.() || "N/A");
+    const d = r.createdAt?.toDate?.();
+    const label = d
+      ? `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`
+      : "N/A";
+    if (!labelSet.includes(label)) labelSet.push(label);
+  });
+
+  // Collect datasets keyed by metric name, aligned to labelSet
+  const datasetMap = {};
+  filtered.forEach((r) => {
+    const d = r.createdAt?.toDate?.();
+    const label = d
+      ? `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`
+      : "N/A";
+    const idx = labelSet.indexOf(label);
 
     for (const key in (r.values || {})) {
-      if (!datasets[key]) datasets[key] = [];
-      datasets[key].push(r.values[key]);
+      if (!datasetMap[key]) {
+        datasetMap[key] = new Array(labelSet.length).fill(null);
+      }
+      datasetMap[key][idx] = r.values[key];
     }
   });
 
-  const chartData = {
-    labels,
-    datasets: Object.keys(datasets).map((key) => ({
-      label: key,
-      data: datasets[key],
-      fill: false,
-      tension: 0.3
-    }))
-  };
+  const chartDatasets = Object.keys(datasetMap).map((key) => ({
+    label: key,
+    data: datasetMap[key],
+    fill: false,
+    tension: 0.3,
+    borderColor: DATASET_COLORS[key] || "rgba(100, 100, 100, 1)",
+    backgroundColor: DATASET_COLORS[key] || "rgba(100, 100, 100, 0.2)",
+    spanGaps: true
+  }));
+
+  const chartTitle = type === ""
+    ? "All Types Trend"
+    : `${type.charAt(0).toUpperCase() + type.slice(1)} Trend`;
 
   if (trendChart) trendChart.destroy();
 
-  // Chart global bo‘lishi kerak (results template’da CDN bor)
   trendChart = new Chart(ctx, {
     type: "line",
-    data: chartData,
+    data: { labels: labelSet, datasets: chartDatasets },
     options: {
       responsive: true,
       plugins: {
         title: {
           display: true,
-          text: `${type.charAt(0).toUpperCase() + type.slice(1)} Trend`
+          text: chartTitle
         },
         legend: { display: true, position: "bottom" }
       },
       scales: { y: { beginAtZero: true } }
     }
   });
+
+  return trendChart;
 }
 
 /* ======================
@@ -405,7 +436,7 @@ async function updateTrendChart(parentId) {
   // ✅ SPA guard
   if (!childFilter || !typeFilter) return;
 
-  // ✅ Child tanlanmagan bo‘lsa — trend umuman chiqmasin
+  // ✅ Child tanlanmagan bo'lsa — trend umuman chiqmasin
   if (!childFilter.value) {
     if (trendChart) {
       trendChart.destroy();
@@ -426,15 +457,16 @@ async function updateTrendChart(parentId) {
   snapshot.forEach((d) => {
     const data = d.data();
 
-    // ✅ bola o‘chirilgan bo‘lsa — chartga ham qo‘shmaymiz
+    // ✅ bola o'chirilgan bo'lsa — chartga ham qo'shmaymiz
     if (!childrenMap[data.childId]) return;
 
-    // ✅ tanlangan child bo‘yicha
+    // ✅ tanlangan child bo'yicha
     if (childFilter.value && data.childId !== childFilter.value) return;
 
     allResults.push(data);
   });
 
-  const selectedType = typeFilter.value || "blood";
+  // Default to "" (All Types) instead of "blood"
+  const selectedType = typeFilter.value;
   drawTrendChart(allResults, selectedType);
 }

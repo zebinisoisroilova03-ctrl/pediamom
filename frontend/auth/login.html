@@ -9,12 +9,21 @@
 
   <div class="auth-page login-page">
 
-  <h2>Parent Login</h2>
+  <h2>Login</h2>
 <form id="loginForm">
   <input id="email" type="email" placeholder="Enter email address" required />
   <input id="password" type="password" placeholder="Enter password " required />
   <button type="submit">Login</button>
 </form>
+
+<a href="#" id="forgotPasswordLink">Forgot password?</a>
+
+<div id="forgotPasswordSection" style="display:none">
+  <input id="resetEmail" type="email" placeholder="Enter your email" />
+  <button id="sendResetBtn">Send Reset Email</button>
+  <div id="resetMessage"></div>
+</div>
+
 </div>
 </div>
 

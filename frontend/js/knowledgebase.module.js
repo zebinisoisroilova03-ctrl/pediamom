@@ -160,7 +160,6 @@ if (!bookmarkBtn) {
   bookmarkBtn = document.createElement("button");
   bookmarkBtn.id = "kbBookmarkBtn";
   bookmarkBtn.className = "kb-bookmark-btn";
-  bookmarkBtn.style.marginBottom = "15px";
 
   // title elementdan keyin qo‘shamiz
   title.insertAdjacentElement("afterend", bookmarkBtn);
@@ -213,6 +212,9 @@ function getCategoryTitle(category) {
   if (category === "harmful") return "Harmful Medicines";
   if (category === "immunity") return "Immunity Tips";
   if (category === "vaccines") return "Vaccines Info";
+  if (category === "herbal") return "Natural Herbal Beverages";
+  if (category === "nutrition") return "Child Nutrition Tips";
+  if (category === "sleep") return "Sleep & Development";
   return "Knowledge Base";
 }
 

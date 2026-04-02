@@ -4,8 +4,18 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   onAuthStateChanged,
-  signOut
+  signOut,
+  sendPasswordResetEmail
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+  setDoc,
+  doc,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+// 🔥 Flag: registratsiya jarayonida redirect ni to'xtatish uchun
+let isRegistering = false;
 
 /* =======================
    AUTH GUARD
@@ -22,11 +32,18 @@ onAuthStateChanged(auth, (user) => {
 
   const isDashboard = path.includes("dashboard.html");
 
+  // 🚫 login bo'lmagan user dashboardga kira olmaydi
   if (!user && isDashboard) {
     window.location.href = "./login.html";
     return;
   }
 
+  // 🔥 Registratsiya jarayonida redirect qilmaslik
+  if (isRegistering) {
+    return;
+  }
+
+  // 🚫 login bo'lgan user login/registerga kirmaydi
   if (user && isAuthPage) {
     window.location.href = "./dashboard.html";
     return;
@@ -53,16 +70,48 @@ document.addEventListener("DOMContentLoaded", () => {
   if (registerForm) {
     registerForm.addEventListener("submit", async (e) => {
       e.preventDefault();
+  if (registerForm) {
+    registerForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
 
-      const email = registerForm.querySelector("#email").value.trim();
+      const email = registerForm.querySelector("#email").value;
       const password = registerForm.querySelector("#password").value;
 
       try {
-        await createUserWithEmailAndPassword(auth, email, password);
+        // 🔥 Registratsiya boshlanmoqda
+        isRegistering = true;
+
+        const userCredential = await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+
+        const user = userCredential.user;
+
+        console.log("Creating Firestore doc for:", user.uid);
+
+        // 🔥 Firestore ga yozish (bu tugashini kutamiz)
+        await setDoc(
+          doc(db, "users", user.uid),
+          {
+            email: user.email,
+            role: "parent",
+            createdAt: serverTimestamp()
+          }
+        );
+
+        console.log("Firestore document successfully created");
+
+        // 🔥 Endi redirect qilishimiz mumkin
+        isRegistering = false;
         window.location.href = "./dashboard.html";
+
       } catch (err) {
         console.error("REGISTER ERROR:", err);
         alert(err.message);
+        // 🔥 Xato bo'lsa ham flagni reset qilamiz
+        isRegistering = false;
       }
     });
   }
@@ -87,17 +136,30 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /* ========= LOGOUT ========= */
-  const logoutBtn = document.getElementById("logoutBtn");
+  /* ========= FORGOT PASSWORD ========= */
+  const forgotPasswordLink = document.getElementById("forgotPasswordLink");
+  const forgotPasswordSection = document.getElementById("forgotPasswordSection");
+  const sendResetBtn = document.getElementById("sendResetBtn");
 
-  if (logoutBtn) {
-    logoutBtn.addEventListener("click", async () => {
+  if (forgotPasswordLink && forgotPasswordSection) {
+    forgotPasswordLink.addEventListener("click", (e) => {
+      e.preventDefault();
+      forgotPasswordSection.style.display =
+        forgotPasswordSection.style.display === "none" ? "block" : "none";
+    });
+  }
+
+  if (sendResetBtn) {
+    sendResetBtn.addEventListener("click", async () => {
+      const email = document.getElementById("resetEmail").value;
+      const resetMessage = document.getElementById("resetMessage");
       try {
-        await signOut(auth);
-        window.location.href = "../index.html";
+        await sendPasswordResetEmail(auth, email);
+        resetMessage.textContent = "✅ Reset email sent! Check your inbox.";
       } catch (err) {
-        console.error("LOGOUT ERROR:", err);
+        resetMessage.textContent = err.message;
       }
     });
   }
+
 });

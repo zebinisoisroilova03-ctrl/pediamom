@@ -76,21 +76,39 @@ children: `<div class="children-page">
         <div class="container">
           <h2>Medicine List</h2>
 
-          <div class="medicine-child-filter">
-            <label for="childSelect">Select child</label>
-            <select id="medicineChildSelect">
-              <option value="">— Select child —</option>
-            </select>
+          <div class="medicine-tabs">
+            <button class="tab-btn active" data-tab="child-medicines">💊 Child Medicines</button>
+            <button class="tab-btn" data-tab="my-supplements">🌿 My Supplements</button>
           </div>
 
-          <form id="addMedicineForm">
-            <input type="text" id="medicineName" placeholder="Medicine name" required>
-            <input type="text" id="dosage" placeholder="Dosage" required>
-            <input type="number" id="timesPerDay" placeholder="Times per day" min="1" required>
-            <button type="submit">Add Medicine</button>
-          </form>
+          <div class="tab-content active" data-tab="child-medicines">
+            <div class="medicine-child-filter">
+              <label for="medicineChildSelect">Select child</label>
+              <select id="medicineChildSelect">
+                <option value="">— Select child —</option>
+              </select>
+            </div>
 
-          <ul id="medicineList"></ul>
+            <form id="addMedicineForm">
+              <input type="text" id="medicineName" placeholder="Medicine name" required>
+              <input type="text" id="dosage" placeholder="Dosage" required>
+              <input type="number" id="timesPerDay" placeholder="Times per day" min="1" required>
+              <button type="submit">Add Medicine</button>
+            </form>
+
+            <ul id="medicineList"></ul>
+          </div>
+
+          <div class="tab-content" data-tab="my-supplements">
+            <form id="addSupplementForm">
+              <input type="text" id="supplementName" placeholder="Supplement name" required>
+              <input type="text" id="supplementDosage" placeholder="Dosage" required>
+              <input type="number" id="supplementTimesPerDay" placeholder="Times per day" min="1" required>
+              <button type="submit">Add Supplement</button>
+            </form>
+
+            <ul id="supplementList"></ul>
+          </div>
         </div>
       </div>
     `,
@@ -153,6 +171,24 @@ children: `<div class="children-page">
             <h3>Vaccines Info</h3>
             <p>Basic vaccine education and guidance for parents.</p>
           </button>
+
+          <button class="kb-category-card" data-category="herbal">
+            <span class="kb-icon">🌿</span>
+            <h3>Natural Herbal Beverages</h3>
+            <p>Safe and beneficial herbal drinks for children's health.</p>
+          </button>
+
+          <button class="kb-category-card" data-category="nutrition">
+            <span class="kb-icon">🥗</span>
+            <h3>Child Nutrition Tips</h3>
+            <p>Practical nutrition advice for healthy child development.</p>
+          </button>
+
+          <button class="kb-category-card" data-category="sleep">
+            <span class="kb-icon">😴</span>
+            <h3>Sleep & Development</h3>
+            <p>Understanding sleep patterns and their role in child growth.</p>
+          </button>
         </div>
       </div>
 
@@ -184,20 +220,9 @@ children: `<div class="children-page">
 
     savedarticles: `
 <div class="saved-articles-page">
-  <div class="container">
-    <h2>⭐ Saved Articles</h2>
-    <ul id="savedArticlesList"></ul>
-  </div>
+  <h2>⭐ Saved Articles</h2>
+  <div id="savedArticlesGrid" class="saved-articles-grid"></div>
 </div>
-`,
-
-    pregnancy: `
-  <div class="pregnancy-page">
-    <div class="container">
-      <h2>Pregnancy Calendar</h2>
-      <div id="pregnancyContent"></div>
-    </div>
-  </div>
 `,
 
     addanalysis: `
@@ -220,20 +245,13 @@ children: `<div class="children-page">
         <select id="typeSelect">
           <option value="">Select type</option>
           <option value="blood">Blood</option>
-          <option value="urine">Urine</option>
           <option value="vitamin">Vitamin</option>
         </select>
 
         <div id="bloodFields" style="display:none;">
           <h4>Blood Analysis</h4>
           <input type="number" id="hemoglobin" placeholder="Hemoglobin" />
-          <input type="number" id="iron" placeholder="Iron" />
-        </div>
-
-        <div id="urineFields" style="display:none;">
-          <h4>Urine Analysis</h4>
-          <input type="number" id="protein" placeholder="Protein" />
-          <input type="number" id="ph" placeholder="pH" />
+          <input type="number" id="ferritin" name="ferritin" placeholder="Ferritin" />
         </div>
 
         <div id="vitaminFields" style="display:none;">
@@ -244,6 +262,7 @@ children: `<div class="children-page">
 
         <button type="submit">Save Analysis</button>
       </form>
+      <div id="aiSummaryBlock" style="display:none"></div>
 
     </div>
   </div>
@@ -263,7 +282,6 @@ children: `<div class="children-page">
         <select id="typeFilter">
           <option value="">All Types</option>
           <option value="blood">Blood</option>
-          <option value="urine">Urine</option>
           <option value="vitamin">Vitamin</option>
         </select>
       </div>
@@ -309,17 +327,221 @@ children: `<div class="children-page">
 `,
 
     admin: `
-  <div class="admin-page container">
-    <h2>👑 Admin Panel</h2>
-    <p>Manage Knowledge Base Articles</p>
-    <div id="adminContent"></div>
+  <div class="admin-page">
+    <div class="admin-header">
+      <h2>👑 Admin Panel</h2>
+      <button id="adminAddBtn" class="admin-add-btn">➕ Add Article</button>
+    </div>
+    <div class="admin-search-bar">
+      <input id="adminSearch" placeholder="Search articles..." />
+      <select id="adminCategoryFilter">
+        <option value="">All Categories</option>
+        <option value="harmful">Harmful</option>
+        <option value="immunity">Immunity</option>
+        <option value="vaccines">Vaccines</option>
+        <option value="herbal">Herbal</option>
+        <option value="nutrition">Nutrition</option>
+        <option value="sleep">Sleep</option>
+      </select>
+    </div>
+    <div id="adminArticlesList"></div>
   </div>
 `,
 
+    motherhealth: `
+<div class="motherhealth-page">
+  <div class="mh-header">
+    <h2>👩 Mother Health</h2>
+    <p>Your health, your journey</p>
+  </div>
+  <div class="mh-nav-cards">
+    <div class="mh-nav-card" data-page="pregnancy">
+      <span class="mh-icon">🤰</span>
+      <h3>Pregnancy & Period</h3>
+      <p>Track your pregnancy journey and menstrual cycle</p>
+    </div>
+    <div class="mh-nav-card" data-page="medicines">
+      <span class="mh-icon">💊</span>
+      <h3>My Supplements</h3>
+      <p>Manage your vitamins and supplements</p>
+    </div>
+  </div>
+
+  <div class="mh-cards-grid">
+    <div class="mh-card" id="waterIntakeCard">
+      <h3>💧 Daily Water Goal</h3>
+      <label>Daily goal (liters)</label>
+      <input type="number" id="waterLiters" step="0.1" min="0.5" max="5" placeholder="e.g. 2.0" />
+      <p id="waterGlassesDisplay" class="mh-glasses-display"></p>
+      <label>Start hour (0–23)</label>
+      <input type="number" id="waterStartHour" min="0" max="23" placeholder="e.g. 7" />
+      <label>End hour (0–23)</label>
+      <input type="number" id="waterEndHour" min="0" max="23" placeholder="e.g. 22" />
+      <p id="waterError" class="mh-error"></p>
+      <button id="saveWaterBtn">Save</button>
+    </div>
+
+    <div class="mh-card" id="appointmentCard">
+      <h3>🏥 Next Doctor Appointment</h3>
+      <label>Appointment date</label>
+      <input type="date" id="appointmentDate" />
+      <p id="appointmentWarning" class="mh-error"></p>
+      <button id="saveAppointmentBtn">Save</button>
+    </div>
+  </div>
+</div>
+`,
+
+    pregnancy: `
+<div class="pregnancy-page">
+  <div class="pregnancy-header">
+    <h2>🤰 Pregnancy &amp; Period Calendar</h2>
+    <p>Track your pregnancy journey and menstrual cycle</p>
+  </div>
+
+  <div class="pregnancy-info-cards">
+    <div class="pregnancy-info-card">
+      <h3>📋 Overview</h3>
+      <p>Monitor your pregnancy progress and key milestones week by week.</p>
+    </div>
+    <div class="pregnancy-info-card">
+      <h3>📅 This Week</h3>
+      <p>Your baby is growing. Stay hydrated and take your prenatal vitamins.</p>
+    </div>
+    <div class="pregnancy-info-card">
+      <h3>🏆 Milestones</h3>
+      <p>Track important milestones throughout your pregnancy journey.</p>
+    </div>
+    <div class="pregnancy-info-card">
+      <h3>🩺 Symptoms</h3>
+      <p style="color:#64748b;font-size:14px;">Note any symptoms in your health journal.</p>
+    </div>
+    <div class="pregnancy-info-card">
+      <h3>🤖 AI Advice</h3>
+      <p style="color:#64748b;font-size:14px;">AI-powered pregnancy advice coming soon. Stay tuned!</p>
+    </div>
+  </div>
+
+  <div class="period-calendar-section pregnancy-form-container">
+    <h3>🗓️ Period Calendar</h3>
+
+    <div class="period-inputs">
+      <div>
+        <label for="lastPeriodDate" style="display:block;font-size:13px;color:#64748b;margin-bottom:4px;">Last Period Date</label>
+        <input type="date" id="lastPeriodDate" />
+      </div>
+      <div>
+        <label for="cycleLength" style="display:block;font-size:13px;color:#64748b;margin-bottom:4px;">Cycle Length (21–35 days)</label>
+        <input type="number" id="cycleLength" min="21" max="35" value="28" />
+      </div>
+      <div style="display:flex;align-items:flex-end;">
+        <button id="savePeriodBtn">Save</button>
+      </div>
+    </div>
+
+    <div class="calendar-nav">
+      <button id="calendarPrev">&#8592; Prev</button>
+      <span id="calendarTitle" style="font-weight:600;font-size:16px;color:#1e293b;"></span>
+      <button id="calendarNext">Next &#8594;</button>
+    </div>
+
+    <div id="periodCalendarGrid" class="calendar-grid"></div>
+
+    <div id="nextPeriodInfo" class="next-period-info"></div>
+  </div>
+</div>
+`,
+
     settings: `
-      <h1>⚙️ Settings</h1>
-      <p>User settings will be here</p>
-    `
+<div class="settings-page">
+  <div class="settings-header">
+    <h2>⚙️ Settings</h2>
+    <p>Manage your account and preferences</p>
+  </div>
+
+  <div class="settings-section">
+    <h3>👤 Profile Settings</h3>
+    <div class="settings-field">
+      <label>Display Name</label>
+      <input type="text" id="settingsDisplayName" placeholder="Your name" />
+    </div>
+    <div class="settings-field">
+      <label>Email</label>
+      <input type="email" id="settingsEmail" placeholder="your@email.com" readonly />
+    </div>
+    <button id="saveProfileBtn" class="settings-save-btn">Save Profile</button>
+  </div>
+
+  <div class="settings-section">
+    <h3>🔒 Change Password</h3>
+    <div class="settings-field">
+      <label>Current Password</label>
+      <input type="password" id="currentPassword" placeholder="Current password" />
+    </div>
+    <div class="settings-field">
+      <label>New Password</label>
+      <input type="password" id="newPassword" placeholder="New password" />
+    </div>
+    <div class="settings-field">
+      <label>Confirm New Password</label>
+      <input type="password" id="confirmPassword" placeholder="Confirm new password" />
+    </div>
+    <p id="passwordError" class="settings-error" style="display:none;"></p>
+    <button id="changePasswordBtn" class="settings-save-btn">Change Password</button>
+  </div>
+
+  <div class="settings-section">
+    <h3>🔔 Notifications</h3>
+    <div class="settings-toggle-row">
+      <span>Enable Notifications</span>
+      <label class="toggle-switch">
+        <input type="checkbox" id="notificationsToggle" />
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+  </div>
+
+  <div class="settings-section">
+    <h3>📱 Telegram Notifications</h3>
+    <p style="font-size:13px;color:#64748b;margin-bottom:12px;">
+      Get medicine, vaccine, water and appointment reminders on your phone via Telegram.
+      First, start our bot: <a href="https://t.me/PediaMomBot" target="_blank" style="color:#3b82f6;">@PediaMomBot</a>
+      — it will show your Chat ID.
+    </p>
+    <div class="settings-field">
+      <label>Your Telegram Chat ID</label>
+      <input type="text" id="telegramChatId" placeholder="e.g. 123456789" />
+      <p id="telegramChatIdError" class="settings-error" style="display:none;">Please enter your Telegram Chat ID</p>
+    </div>
+    <button id="saveTelegramBtn" class="settings-save-btn">Save</button>
+  </div>
+
+  <div class="settings-section">
+    <h3>🎨 App Preferences</h3>
+    <div class="settings-field">
+      <label>Language</label>
+      <select id="languageSelect">
+        <option value="en">English</option>
+      </select>
+    </div>
+    <div class="settings-toggle-row">
+      <span>Dark Mode</span>
+      <label class="toggle-switch">
+        <input type="checkbox" id="darkModeToggle" />
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+  </div>
+
+  <div class="settings-section danger-zone">
+    <h3>⚠️ Danger Zone</h3>
+    <p style="color:#64748b;font-size:14px;margin-bottom:16px;">Permanently delete your account and all associated data.</p>
+    <button id="deleteAccountBtn" class="settings-danger-btn">Delete Account</button>
+  </div>
+
+  <div id="settingsMessage" class="settings-message" style="display:none;"></div>
+</div>
+`
   };
 
   /* ======================
@@ -430,28 +652,33 @@ menuItems.forEach(item => {
     }
 
     if (pageKey === "admin") {
-     if (auth.currentUser?.uid !== ADMIN_UID) {
-      content.innerHTML = `
-      <div class="admin-page container">
-        <h2>Access denied</h2>
-        <p>You are not allowed to open this page.</p>
-      </div>
-    `;
-    return;
-  }
-
-  const module = await import("./admin.module.js");
-  module.initAdminModule();
-}
+      const module = await import("./admin.module.js");
+      module.initAdminModule();
+    }
   });
 });
   /* ======================
      LOGOUT
   ====================== */
   if (logoutBtn) {
-    logoutBtn.addEventListener("click", async () => {
+    logoutBtn.addEventListener("click", () => {
+      const modal = document.getElementById("logoutModal");
+      if (modal) modal.classList.remove("hidden");
+    });
+
+    document.getElementById("logoutConfirmYes")?.addEventListener("click", async () => {
       await signOut(auth);
       window.location.href = "../index.html";
+    });
+
+    document.getElementById("logoutConfirmNo")?.addEventListener("click", () => {
+      document.getElementById("logoutModal")?.classList.add("hidden");
+    });
+
+    document.getElementById("logoutModal")?.addEventListener("click", (e) => {
+      if (e.target === document.getElementById("logoutModal")) {
+        document.getElementById("logoutModal").classList.add("hidden");
+      }
     });
   }
 });

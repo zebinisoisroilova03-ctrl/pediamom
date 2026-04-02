@@ -11,13 +11,13 @@ import {
 let savedArticles = [];
 
 export async function initSavedArticlesModule() {
-  const list = document.getElementById("savedArticlesList");
-  if (!list) return;
+  const grid = document.getElementById("savedArticlesGrid");
+  if (!grid) return;
 
   const user = auth.currentUser;
   if (!user) return;
 
-  list.innerHTML = "<li>Loading...</li>";
+  grid.innerHTML = `<div class="saved-article-card"><p>Loading...</p></div>`;
 
   const bookmarkSnap = await getDocs(
     query(
@@ -27,7 +27,7 @@ export async function initSavedArticlesModule() {
   );
 
   if (bookmarkSnap.empty) {
-    list.innerHTML = "<li>No saved articles yet.</li>";
+    renderSavedArticles([]);
     return;
   }
 
@@ -49,70 +49,64 @@ export async function initSavedArticlesModule() {
     }
   }
 
-  renderSavedArticles();
+  renderSavedArticles(savedArticles);
 }
 
-function renderSavedArticles() {
-  const list = document.getElementById("savedArticlesList");
-  if (!list) return;
+export function renderSavedArticles(articles) {
+  const grid = document.getElementById("savedArticlesGrid");
+  if (!grid) return;
 
-  list.innerHTML = savedArticles.map(article => `
-  <li class="saved-card card" data-id="${article.id}">
-    <div style="display:flex; justify-content:space-between; align-items:center;">
-      <div>
-        <h4 style="margin:0;">${article.title}</h4>
-        <p style="margin-top:6px; color:#666;">${article.summary || ""}</p>
+  if (!articles || articles.length === 0) {
+    grid.innerHTML = `
+      <div class="saved-article-card saved-articles-empty">
+        <p>No saved articles yet. Browse the Knowledge Base to save articles.</p>
       </div>
-      <span style="color:#2F80ED;">→</span>
-    </div>
-  </li>
-`).join("");
+    `;
+    return;
+  }
 
-  document.querySelectorAll(".saved-card").forEach(card => {
-    card.addEventListener("click", () => {
-      const articleId = card.dataset.id;
+  grid.innerHTML = articles.map(article => `
+    <div class="saved-article-card" data-id="${article.id}">
+      <h3>${article.title || ""}</h3>
+      <p class="card-summary">${article.summary || ""}</p>
+      <div class="card-footer">
+        <span class="article-badge ${getCategoryBadgeClass(article.category)}">${article.category || ""}</span>
+        <button class="read-article-btn" data-id="${article.id}">Read →</button>
+      </div>
+    </div>
+  `).join("");
+
+  grid.querySelectorAll(".read-article-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const articleId = btn.dataset.id;
       const article = savedArticles.find(a => a.id === articleId);
       if (article) openArticleDetail(article);
     });
   });
 }
 
-function openArticleDetail(article) {
-  const list = document.getElementById("savedArticlesList");
-
-  list.innerHTML = `
-  <div class="saved-detail card" style="padding:25px;">
-    <button id="backToSaved" style="margin-bottom:15px;">⬅ Back</button>
-    <h2 style="margin-bottom:10px;">${article.title}</h2>
-    <p style="color:#555;">${article.summary || ""}</p>
-
-    <div style="margin:20px 0;">
-      ${formatContent(article.content)}
-    </div>
-
-    <button id="removeBookmark" class="primary">
-      ⭐ Remove Bookmark
-    </button>
-  </div>
-`;
-
-  document.getElementById("backToSaved").onclick = () => {
-    renderSavedArticles();
+export function getCategoryBadgeClass(category) {
+  const map = {
+    harmful: "badge-harmful",
+    immunity: "badge-immunity",
+    vaccines: "badge-vaccines",
+    herbal: "badge-herbal",
+    nutrition: "badge-nutrition",
+    sleep: "badge-sleep"
   };
-
-  document.getElementById("removeBookmark").onclick = async () => {
-    await deleteDoc(doc(db, "user_bookmarks", article.bookmarkId));
-
-    savedArticles = savedArticles.filter(a => a.id !== article.id);
-
-    renderSavedArticles();
-  };
+  return map[category] || "";
 }
 
-function formatContent(text) {
-  return text
-    .split("\n")
-    .filter(Boolean)
-    .map(line => `<p>${line}</p>`)
-    .join("");
+function openArticleDetail(article) {
+  // Navigate to knowledge base and show the article
+  const kbMenuItem = document.querySelector('[data-page="knowledgebase"]');
+  if (kbMenuItem) {
+    kbMenuItem.click();
+    // Dispatch event so knowledge base module can open the article directly
+    setTimeout(() => {
+      document.dispatchEvent(new CustomEvent("kb-navigate-category", {
+        detail: { category: article.category, articleId: article.id }
+      }));
+    }, 300);
+  }
 }

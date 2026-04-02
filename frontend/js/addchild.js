@@ -30,12 +30,14 @@ onAuthStateChanged(auth, (user) => {
     const name = document.getElementById("name").value;
     const age = Number(document.getElementById("age").value);
     const gender = document.getElementById("gender").value;
+    const ageUnit = document.getElementById("ageUnit").value;
 
     try {
       await addDoc(collection(db, "children"), {
         name,
         age,
         gender,
+        ageUnit,
         parentId: user.uid,
         createdAt: serverTimestamp()
       });

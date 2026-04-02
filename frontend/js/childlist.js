@@ -83,11 +83,15 @@ onAuthStateChanged(auth, async (user) => {
     const child = docSnap.data();
     const li = document.createElement("li");
 
+    const ageDisplay = child.ageUnit === "months"
+      ? `${child.age} months`
+      : `${child.age} yrs`;
+
     li.innerHTML = `
       <div class="child-info">
         <span class="child-name">Name: ${child.name}</span>
         <span class="divider">•</span>
-        <span>Age: ${child.age} yrs</span>
+        <span>Age: ${ageDisplay}</span>
         <span class="divider">•</span>
         <span class="gender ${child.gender}">
           Gender: ${child.gender}
